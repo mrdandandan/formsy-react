@@ -41,7 +41,10 @@ Formsy.Form = React.createClass({
       onInvalid: function () {},
       onChange: function () {},
       validationErrors: null,
-      preventExternalInvalidation: false
+      preventExternalInvalidation: false,
+      validateOnAttachToForm: true,
+      validateOnDetachFromForm: true,
+      validateOnFormMount: true
     };
   },
 
@@ -69,7 +72,9 @@ Formsy.Form = React.createClass({
   },
 
   componentDidMount: function () {
-    this.validateForm();
+    if(this.props.validateOnFormMount) {
+      this.validateForm();
+    }
   },
 
   componentWillUpdate: function () {
@@ -407,7 +412,9 @@ Formsy.Form = React.createClass({
       this.inputs.push(component);
     }
 
-    this.validate(component);
+    if(this.props.validateOnAttachToForm) {
+      this.validate(component);
+    }
   },
 
   // Method put on each input component to unregister
@@ -420,7 +427,9 @@ Formsy.Form = React.createClass({
         .concat(this.inputs.slice(componentPos + 1));
     }
 
-    this.validateForm();
+    if(this.props.validateOnDetachFromForm) {
+      this.validateForm();
+    }
   },
   render: function () {
     var {
@@ -436,6 +445,9 @@ Formsy.Form = React.createClass({
       preventExternalInvalidation,
       onSuccess,
       onError,
+      validateOnAttachToForm,
+      validateOnDetachFromForm,
+      validateOnFormMount,
       ...nonFormsyProps
     } = this.props;
 
